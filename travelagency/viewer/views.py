@@ -6,7 +6,7 @@ from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.views import View
-from .models import Continent, Country, City, Hotel, Airport, Trip, TripPurchase
+from .models import Continent, Country, City, Hotel, Airport, Trip, TripPurchase, Blog
 from .serializers import ContinentSerializer, CountrySerializer, HotelSerializer, CitySerializer, AirportSerializer, \
     TripPurchaseSerializer
 
@@ -27,7 +27,8 @@ def special_offers(request):
 
 
 def blog(request):
-    return render(request, "index-3.html")
+    blogs = Blog.objects.all()
+    return render(request, "index-3.html", {'blogs': blogs})
 
 
 def contacts(request):

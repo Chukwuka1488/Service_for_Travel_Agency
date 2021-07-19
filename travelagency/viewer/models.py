@@ -1,5 +1,8 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from datetime import date, datetime
+# from __future__ import unicode_literals
+import calendar
 
 
 # Create your models here.
@@ -51,8 +54,10 @@ class Airport(models.Model):
 
 class Trip(models.Model):
     trip_id = models.AutoField(primary_key=True)
-    departure = models.ForeignKey(Airport, related_name='flight_departure', on_delete=models.DO_NOTHING, null=True, blank=True)
-    arrival = models.ForeignKey(Airport, related_name='flight_arrival', on_delete=models.DO_NOTHING, null=True, blank=True)
+    departure = models.ForeignKey(Airport, related_name='flight_departure', on_delete=models.DO_NOTHING, null=True,
+                                  blank=True)
+    arrival = models.ForeignKey(Airport, related_name='flight_arrival', on_delete=models.DO_NOTHING, null=True,
+                                blank=True)
     arrival_city = models.ForeignKey(City, on_delete=models.DO_NOTHING, null=True, blank=True)
     hotel_booked = models.ForeignKey(Hotel, on_delete=models.DO_NOTHING, null=True, blank=True)
     date_of_departure = models.DateTimeField()
@@ -90,3 +95,11 @@ class TripPurchase(models.Model):
 
     def __str__(self):
         return self.trip_description
+
+
+class Blog(models.Model):
+    title = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='images/', blank=True, null=True)
+    body = models.CharField(max_length=1000000)
+    created_at = models.DateField(default=datetime.now(), blank=False)
+

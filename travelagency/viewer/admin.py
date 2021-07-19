@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Continent, Country, City, Hotel, Airport, Trip, TripPurchase
+from .models import Continent, Country, City, Hotel, Airport, Trip, TripPurchase, Blog
 
 # Register your models here.
 admin.site.register(Continent)
@@ -9,3 +9,4 @@ admin.site.register(Hotel)
 admin.site.register(Airport)
 admin.site.register(Trip)
 admin.site.register(TripPurchase)
+admin.site.register(Blog)
