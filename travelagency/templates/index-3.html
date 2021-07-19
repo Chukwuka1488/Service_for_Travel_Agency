@@ -45,8 +45,13 @@
 								<li><a href="{% url 'index' %}">ABOUT</a></li>
 								<li><a href="{% url 'hot_tours' %}">HOT TOURS</a></li>
 								<li><a href="{% url 'special_offers' %}">SPECIAL OFFERS</a></li>
-								<li class="current"><a href="{% url 'blog' %}">BLOG</a></li>
+{#								<li class="current"><a href="{% url 'blog' %}">BLOG</a></li>#}
 								<li><a href="{% url 'contact' %}">CONTACTS</a></li>
+								{% if user.is_authenticated %}
+								<li><a href="{% url 'logout' %}">LOGOUT</a></li>
+								{% else %}
+								<li><a href="{% url 'login' %}">LOGIN/SIGNUP</a></li>
+								{% endif %}
 							</ul>
 						</nav>
 						<div class="clear"></div>

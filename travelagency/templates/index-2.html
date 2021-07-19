@@ -44,9 +44,14 @@
 							<ul class="sf-menu">
 								<li><a href="{% url 'index' %}">ABOUT</a></li>
 								<li><a href="{% url 'hot_tours' %}">HOT TOURS</a></li>
-								<li class="current"><a href="{% url 'special_offers' %}">SPECIAL OFFERS</a></li>
+{#								<li class="current"><a href="{% url 'special_offers' %}">SPECIAL OFFERS</a></li>#}
 								<li><a href="{% url 'blog' %}">BLOG</a></li>
 								<li><a href="{% url 'contact' %}">CONTACTS</a></li>
+								{% if user.is_authenticated %}
+								<li><a href="{% url 'logout' %}">LOGOUT</a></li>
+								{% else %}
+								<li><a href="{% url 'login' %}">LOGIN/SIGNUP</a></li>
+								{% endif %}
 							</ul>
 						</nav>
 						<div class="clear"></div>
@@ -55,7 +60,7 @@
 				<div class="grid_12">
 					<h1>
 						<a href="{% url 'index' %}">
-							<img src="{% static '' %}images/logo.png" alt="Your Happy Family">
+							<img src="{% static 'images/logo.png' %}" alt="Your Happy Family">
 						</a>
 					</h1>
 				</div>
@@ -96,20 +101,28 @@
 				</div>
 				<div class="grid_3 prefix_1">
 					<h5>Choose the country</h5>
+
+
+{#					continent for loop #}
+
+
 					<ul class="list">
-						<li><a href="#">Albania</a></li>
-						<li><a href="#">American Samoa</a></li>
-						<li><a href="#">Antarctica</a></li>
-						<li><a href="#">Argentina</a></li>
-						<li><a href="#">Armenia</a></li>
-						<li><a href="#">Australia</a></li>
-						<li><a href="#">Austria</a></li>
-						<li><a href="#">Bahrain</a></li>
-						<li><a href="#">Barbados</a></li>
-						<li><a href="#">Belgium</a></li>
-						<li><a href="#">Belize</a></li>
-						<li><a href="#">Bermudas</a></li>
+						{% for country in countries %}
+						<li><a href="#">{{ Country.country_name }}</a></li>
+{#						<li><a href="#">American Samoa</a></li>#}
+{#						<li><a href="#">Antarctica</a></li>#}
+{#						<li><a href="#">Argentina</a></li>#}
+{#						<li><a href="#">Armenia</a></li>#}
+{#						<li><a href="#">Australia</a></li>#}
+{#						<li><a href="#">Austria</a></li>#}
+{#						<li><a href="#">Bahrain</a></li>#}
+{#						<li><a href="#">Barbados</a></li>#}
+{#						<li><a href="#">Belgium</a></li>#}
+{#						<li><a href="#">Belize</a></li>#}
+{#						<li><a href="#">Bermudas</a></li>#}
+						{% endfor %}
 					</ul>
+
 					<a href="#" class="link1">VIEW A<span class="low">ll</span></a>
 				</div>
 			</div>

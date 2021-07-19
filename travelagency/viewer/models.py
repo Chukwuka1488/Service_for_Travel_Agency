@@ -5,28 +5,28 @@ from django.db import models
 # Create your models here.
 class Continent(models.Model):
     continent_id = models.AutoField(primary_key=True)
-    continent = models.CharField(max_length=15)
+    continent_name = models.CharField(max_length=15)
 
     def __str__(self):
-        return self.continent
+        return self.continent_name
 
 
 class Country(models.Model):
     country_id = models.AutoField(primary_key=True)
-    country = models.CharField(max_length=60)
+    country_name = models.CharField(max_length=60)
     continent = models.ForeignKey(Continent, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     def __str__(self):
-        return self.country
+        return self.country_name
 
 
 class City(models.Model):
     city_id = models.AutoField(primary_key=True)
-    city = models.CharField(max_length=90)
+    city_name = models.CharField(max_length=90)
     country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     def __str__(self):
-        return self.city
+        return self.city_name
 
 
 class Hotel(models.Model):

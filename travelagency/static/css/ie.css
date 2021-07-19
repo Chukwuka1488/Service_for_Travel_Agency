@@ -24,3 +24,9 @@ ul.list1 li .drop, .socials a {
 	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=70);
 
 }
+
+.welcome {
+	color: whitesmoke;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: large;
+}

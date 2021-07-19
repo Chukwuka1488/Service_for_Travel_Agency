@@ -8,8 +8,11 @@ urlpatterns = [
     path('contacts', views.contacts, name='contact'),
     path('offers', views.special_offers, name='special_offers'),
 
+    path('register', views.register, name='register'),
+    path('login', views.login, name='login'),
+    path('logout', views.logout, name='logout'),
+
     path('counterIndex', views.counter_index, name='counter_form'),
     path('counter', views.counter, name='counter'),
-    path('<int:contin', views.continent_api, name='continent'),
 
 ]
