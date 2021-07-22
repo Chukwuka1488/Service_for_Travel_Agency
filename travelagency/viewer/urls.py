@@ -11,6 +11,9 @@ urlpatterns = [
     path('register', views.register, name='register'),
     path('login', views.login, name='login'),
     path('logout', views.logout, name='logout'),
+    # path('hotels', views.hotels, name='hotels'),
+
+    path('continents', views.continent_api, name='continents'),
 
     path('counterIndex', views.counter_index, name='counter_form'),
     path('counter', views.counter, name='counter'),

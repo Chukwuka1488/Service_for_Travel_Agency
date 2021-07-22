@@ -35,6 +35,38 @@ def contacts(request):
     return render(request, "index-4.html")
 
 
+@csrf_exempt
+def continent_api(request):
+    if request.method == 'GET':
+        continents = Continent.objects.all()
+        continents_serializer = ContinentSerializer(continents, many=True)
+        return JsonResponse(continents_serializer.data, safe=False)
+
+    elif request.method == 'POST':
+        continent_data = JSONParser().parse(request)
+        continent_serializer = ContinentSerializer(data=continent_data)
+        if continent_serializer.is_valid():
+            continent_serializer.save()
+            return JsonResponse('Added Successfully!!', safe=False)
+        return JsonResponse("Failed to Add", safe=False)
+
+    elif request.method == 'PUT':
+        continent_data = JSONParser().parse(request)
+        continent = Continent.objects.get(continent_id=continent_data['continent_id'])
+        continent_serializer = ContinentSerializer(continent, data=continent_data)
+        if continent_serializer.is_valid():
+            continent_serializer.save()
+            return JsonResponse("Updated Successfully!!", safe=False)
+        return JsonResponse("Failed to Update.", safe=False)
+
+    elif request.method == 'DELETE':
+        continent = Continent.objects.get(continent_id=id)
+        continent.delete()
+        return JsonResponse("Deleted Successfully!!", safe=False)
+    else:
+        return JsonResponse("Failed to Delete", safe=False)
+
+
 def counter_index(request):
     return render(request, "counter-index.html")
 
@@ -58,6 +90,15 @@ def register(request):
                 return redirect('register')
             elif User.objects.filter(username=username).exists():
                 messages.info(request, "Username already taken")
+                return redirect('register')
+            elif username == "":
+                messages.info(request, "Enter Username")
+                return redirect('register')
+            elif len(email) == 0:
+                messages.info(request, "Enter Email")
+                return redirect('register')
+            elif password == "":
+                messages.info(request, "Enter Password")
                 return redirect('register')
             else:
                 user = User.objects.create_user(username=username, email=email, password=password)
@@ -89,34 +130,3 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect('/')
-
-
-@csrf_exempt
-def continent_api(request, id=0):
-    if request.method == 'GET':
-        continents = Continent.objects.all()
-        continents_serializer = ContinentSerializer(continents, many=True)
-        return JsonResponse(continents_serializer.data, safe=False)
-
-    elif request.method == 'POST':
-        continent_data = JSONParser().parse(request)
-        continent_serializer = ContinentSerializer(data=continent_data)
-        if continent_serializer.is_valid():
-            continent_serializer.save()
-            return JsonResponse('Added Successfully!!', safe=False)
-        return JsonResponse("Failed to Add", safe=False)
-
-    elif request.method == 'PUT':
-        continent_data = JSONParser().parse(request)
-        continent = Continent.objects.get(continent_id=continent_data['continent_id'])
-        continent_serializer = ContinentSerializer(continent, data=continent_data)
-        if continent_serializer.is_valid():
-            continent_serializer.save()
-            return JsonResponse("Updated Successfully!!", safe=False)
-        return JsonResponse("Failed to Update.", safe=False)
-
-    elif request.method == 'DELETE':
-        continent = Continent.objects.get(continent_id=id)
-        continent.delete()
-        return JsonResponse("Deleted Successfully!!", safe=False)
-    return JsonResponse("Failed to Delete", safe=False)

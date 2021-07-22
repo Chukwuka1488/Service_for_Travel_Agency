@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'travelagency.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'travelagency_db',
+        'NAME': 'travel_db',
         'USER': 'postgres',
         'PASSWORD': 'Onyema_07',
         'HOST': 'localhost',

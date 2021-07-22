@@ -7,63 +7,60 @@ import calendar
 
 # Create your models here.
 class Continent(models.Model):
-    continent_id = models.AutoField(primary_key=True)
-    continent_name = models.CharField(max_length=15)
+    name = models.CharField('Continent Name', max_length=15)
 
     def __str__(self):
-        return self.continent_name
+        return self.name
 
 
 class Country(models.Model):
-    country_id = models.AutoField(primary_key=True)
-    country_name = models.CharField(max_length=60)
+    name = models.CharField('Country Name', max_length=60)
     continent = models.ForeignKey(Continent, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     def __str__(self):
-        return self.country_name
+        return self.name
 
 
 class City(models.Model):
-    city_id = models.AutoField(primary_key=True)
-    city_name = models.CharField(max_length=90)
+    name = models.CharField('City Name', max_length=90)
     country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     def __str__(self):
-        return self.city_name
+        return self.name
 
 
 class Hotel(models.Model):
-    hotel_id = models.AutoField(primary_key=True)
-    hotel_name = models.CharField(max_length=150)
+    name = models.CharField('Hotel Name', max_length=150)
     hotel_standard = models.PositiveIntegerField(default=10, validators=[MinValueValidator(1), MaxValueValidator(100)])
-    hotel_description = models.TextField()
+    hotel_description = models.TextField(null=True, blank=True)
     city = models.ForeignKey(City, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     def __str__(self):
-        return self.hotel_name
+        return self.name
 
 
 class Airport(models.Model):
-    airport_id = models.AutoField(primary_key=True)
-    airport_name = models.CharField(max_length=150)
+    name = models.CharField('Airport Name', max_length=350, default="")
     city = models.ForeignKey(City, on_delete=models.DO_NOTHING, null=True, blank=True)
+    country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     def __str__(self):
-        return self.airport_name
+        return self.name
 
 
 class Trip(models.Model):
-    trip_id = models.AutoField(primary_key=True)
+    name = models.CharField('Trip Name', max_length=350)
     departure = models.ForeignKey(Airport, related_name='flight_departure', on_delete=models.DO_NOTHING, null=True,
                                   blank=True)
     arrival = models.ForeignKey(Airport, related_name='flight_arrival', on_delete=models.DO_NOTHING, null=True,
                                 blank=True)
+    # Trip.arrival_city.country = country of city
     arrival_city = models.ForeignKey(City, on_delete=models.DO_NOTHING, null=True, blank=True)
     hotel_booked = models.ForeignKey(Hotel, on_delete=models.DO_NOTHING, null=True, blank=True)
-    date_of_departure = models.DateTimeField()
-    date_of_arrival = models.DateTimeField()
-    date_of_return = models.DateTimeField()
-    number_of_days_stay = models.PositiveIntegerField()
+    date_of_departure = models.DateTimeField('Flight Departure Date')
+    date_of_arrival = models.DateTimeField('Flight Arrival Date')
+    date_of_return = models.DateTimeField('Customer Return Date')
+    number_of_days_stay = models.PositiveIntegerField('Length of Stay')
     trip_choice = (
         ('Bed & Breakfast', 'BB'),
         ('HalfBoard', 'HB'),
@@ -80,26 +77,34 @@ class Trip(models.Model):
     available_children_places = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"Your trip with ID No {self.trip_id} departs {self.departure} at {self.date_of_departure} " \
-               f"and arrives {self.arrival} in {self.arrival_city} at {self.date_of_arrival}. You will be " \
-               f"lodged at {self.hotel_booked} for {self.number_of_days_stay} and your flight return is " \
-               f"scheduled for {self.date_of_return}"
+        return self.name
+
+
+class Customer(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    phone_number = models.CharField('Contact Phone', max_length=25)
+    email_address = models.EmailField('User Email Address')
+
+    def __str__(self):
+        return self.first_name + ' ' + self.last_name
 
 
 class TripPurchase(models.Model):
-    purchase_id = models.AutoField(primary_key=True)
-    trip_id = models.ForeignKey(Trip, on_delete=models.DO_NOTHING, null=True, blank=True)
-    trip_description = models.TextField()
-    user = models.ForeignKey(City, on_delete=models.DO_NOTHING, null=True, blank=True)
+    trip = models.ForeignKey(Trip, on_delete=models.DO_NOTHING, null=True, blank=True)
+    trip_description = models.TextField(null=True, blank=True)
+    travellers = models.ManyToManyField(Customer, null=True, blank=True)
     total_cost = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
-        return self.trip_description
+        return self.trip.name
 
 
 class Blog(models.Model):
     title = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='images/', blank=True, null=True)
-    body = models.CharField(max_length=1000000)
-    created_at = models.DateField(default=datetime.now(), blank=False)
+    body = models.CharField(max_length=1000000, null=True, blank=True)
+    created_at = models.DateField(default=datetime.now(), null=True, blank=True)
+    trip = models.ForeignKey(Trip, on_delete=models.DO_NOTHING, null=True, blank=True)
 
+    def __str__(self):
+        return self.title
